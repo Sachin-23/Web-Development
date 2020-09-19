@@ -1,0 +1,37 @@
+%font_style  {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.H {
+  @extend %font_style;
+  margin: 1vw 8vw;
+  .query  {
+    text-align: center;
+  }
+  #id  {
+    align-items: center;
+  }
+  div  {
+    font-size: 3vmin;
+  }
+}
+
+#query  {
+  @extend %font_style;
+  background-color: #fff;
+  border: 1px solid #e5e2e2;
+  border-radius: 6px;
+}
+
+input[type=text]  {
+  font-size: 2.8vw;
+  text-align: center;
+  width: 40vw;
+  height: 3vw;
+  margin-bottom: 50px
+}
+
+.abt  {
+  font-size: 40px;
+}

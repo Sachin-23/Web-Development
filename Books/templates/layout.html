@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
+    <title>
+      {% block title %}
+      {% endblock %}
+    </title>
+    </head>
+    <body>
+      <header>
+        <nav>
+          <div id="nav-links">
+          <a id="nav-title" href="{{ url_for('index') }}">Books</a>
+          <a class="nav-other-link" href="{{ url_for('register') }}">Register</a>
+          <a class="nav-other-link" href="{{ url_for('logout') }}">Logout</a>
+          </div>
+          <form id="nav-search" action="search" method="GET">
+            <input type="search" name="q" placeholder="ISBN, author or title" required> 
+            <input type="submit" value="Search">
+          </form>
+        </nav>
+        <h3 style="text-align: center;margin: 5px;">{{msg}}<h3>
+      </header>
+      {% block body %}
+      {% endblock %}
+      </div>
+    </body>
+</html>

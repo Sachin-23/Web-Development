@@ -1,0 +1,16 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+Create
+{% endblock %}
+
+{% block body %}
+{% if Error != "" %}
+  {{ Error | safe }}
+{% endif %}
+<form action="{% url "create" %}", method="POST">
+{% csrf_token %}
+{{ editarea }}
+<input type="submit" value="Submit">
+</form>
+{% endblock %}

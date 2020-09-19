@@ -1,0 +1,34 @@
+.H, #query {
+  font-family: sans-serif;
+  text-align: center; }
+
+.H {
+  margin: 1vw 8vw; }
+  .H .query {
+    text-align: center; }
+  .H #id {
+    align-items: center; }
+  .H div {
+    font-size: 3vmin; }
+
+#query {
+  background-color: #fff;
+  border: 1px solid #e5e2e2;
+  border-radius: 6px; }
+
+<<<<<<< HEAD
+input[type=text] {s
+=======
+input[type=text] {
+  font-size: 2.8vw;
+>>>>>>> a4140409fb76c3c2bec27019bc7061b1bfe7644f
+  font-size: 2.5vw;
+  text-align: center;
+  width: 40vw;
+  height: 3vw;
+  margin-bottom: 50px; }
+
+.abt {
+  font-size: 40px; }
+
+/*# sourceMappingURL=blog.css.map */

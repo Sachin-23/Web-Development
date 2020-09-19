@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export FLASK_APP=application.py
+export FLASK_DEBUG=True
+export DATABASE_URL=$1
+flask run

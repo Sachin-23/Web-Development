@@ -1,0 +1,142 @@
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+body {
+    line-height:1;
+}
+
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section { 
+    display:block;
+}
+
+nav ul {
+    list-style:none;
+}
+
+blockquote, q {
+    quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+
+a {
+    margin:0;
+    padding:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+/* change colours to suit your needs */
+ins {
+    background-color:#ff9;
+    color:#000;
+    text-decoration:none;
+}
+
+/* change colours to suit your needs */
+mark {
+    background-color:#ff9;
+    color:#000; 
+    font-style:italic;
+    font-weight:bold;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+    border-bottom:1px dotted;
+    cursor:help;
+}
+
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+
+/* change border colour to suit your needs */ hr {
+    display:block;
+    height:1px;
+    border:0;   
+    border-top:1px solid #cccccc;
+    margin:1em 0;
+    padding:0;
+}
+
+input, select {
+    vertical-align:middle;
+}
+/*---my_css__*/
+
+/* div {
+    background-image: url("../google_logo.png");
+    background-repeat: no-repeat;
+    background-position: center 0px;
+    display: block;
+    height: 200px;
+    width: 500px;
+    margin: 200px auto; 
+}  */
+
+div  {
+    display: block;
+    padding: 8% 25%;
+/*    border: 2px solid black;*/
+    margin: 5px;
+}
+
+div > img  {
+    margin-left: 22%;
+    margin-top: 100px;
+}
+
+input[type=text]  {
+    width: 500px;
+    height: 28px;
+    border-radius: 15px;
+    padding: 0px 10px;
+    margin-top: 20px;
+    margin-left: 18px;
+}
+
+input[type=submit]  {
+    margin: 14px 35px 14px 100px;  
+}
+
+nav > a {
+    text-decoration: none;
+}
+
+span  {
+    display: block;
+    margin-top: 60px;
+}
+
+nav {
+    float: right;
+}

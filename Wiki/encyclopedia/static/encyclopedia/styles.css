@@ -1,0 +1,49 @@
+body {
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+code {
+    white-space: pre;
+}
+
+h1 {
+    margin-top: 0px;
+    padding-top: 20px;
+}
+
+textarea {
+    height:68vh;
+    width: 70%;
+}
+
+.main {
+   padding: 10px;
+}    
+
+.main > form  {
+  display: flex;
+  flex-direction: column;
+}
+
+.main input[type=submit]  {
+  width: 200px;
+  margin-top: 5px;
+}
+
+.search {
+    width: 100%;
+    font-size: 15px;
+    line-height: 15px;
+}
+
+.sidebar {
+    background-color: #000000;
+    color: #ffffff;
+    height: 100vh;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    margin-top: 5px;
+}

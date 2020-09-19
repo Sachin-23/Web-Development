@@ -1,0 +1,33 @@
+$size: 3vw;
+
+.internalpadding {
+  padding-top: $size;
+}
+
+@media  (min-width:1200px)  {
+  .recent_blogs  p  {
+    font-size: 30px;
+    text-decoration: none;
+    padding-left: $size;
+  }
+}
+
+p  {
+  text-decoration: none;
+  text-align: center;
+  font-size: $size;
+  margin: 0px 70px 50px 0px;
+}
+
+.recent_blogs img  {
+  width: 450px;
+  height: 350px;
+  margin: 30px 70px 50px 0px;
+  border-radius: 6px;
+}
+
+.recent_blogs  {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: $size + 6;
+}

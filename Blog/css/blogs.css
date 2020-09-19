@@ -1,0 +1,43 @@
+.places  {
+  font-family: sans-serif;
+}
+
+.heading  {
+  text-align: center;
+  font-size: 4vw;
+  margin: 10px 0px 0px 10px;
+}
+
+
+li > p {
+    font-size: 3vw;
+}
+
+.places img  {
+  display: block;
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 15px;
+  width: 50%;
+  height: 70%;
+}
+
+ol li::before {
+  content: counter(my-awesome-counter) ". ";
+  color: Black;
+  font-size: 2rem;
+}
+
+ol li {
+  counter-increment: my-awesome-counter;
+}
+
+.h  {
+  font-size: 2rem;
+}
+
+ol {
+  list-style: none;
+  counter-reset: my-awesome-counter;
+}

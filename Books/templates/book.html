@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ data[0][1] }}
+{% endblock %}
+
+
+{%block body %}
+<div id="book-content">
+  <h3>Title: {{data[0][1]}}</h3>
+  <h3>Author: {{data[0][2]}}</h3>
+  <h3>Publication Year: {{data[0][3]}}</h3> 
+  <h3>ISBN: {{data[0][0]}}</h3> 
+  <h3>Average Rating (Good Reads): {{avg_rating}}</h3>
+  <h3>No. of rating (Good Reads): {{total_rating}}</h3>
+</div>
+<!--reviews with username-->
+<h3>Reviews From users</h3>
+<table>
+  <th>Username</th>
+  <th>Rating</th>
+  <th>Review</th>
+  {% for review in reviews %}
+  <tr>
+    <td>{{ review[1] }}</td>
+    <td>{{ review[2] }}</td>
+    <td>{{ review[3] }}</td>
+  </tr>
+  {% endfor %}
+</table
+<h3>Add your Review</h3>
+<form action="/book/{{ data[0][1] }}" method="POST">
+  <input type="number" min="0" max="5" name="star-rating" required>
+  <input type="text" name="text-review" required>
+  <input type="submit" value="Submit">
+</form> 
+<ul>
+{% endblock %}
