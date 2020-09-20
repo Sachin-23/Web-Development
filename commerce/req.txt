@@ -1,0 +1,43 @@
+# Project 2
+
+-1. Models - 3 models 
+-  + auction listing
+-  + bids
+-  + comments made on auction listing
+
+-2. Create listing 
+-  + title
+-  + description
+-  + starting bid
+-  + optional
+-    + url for an image
+-    + category 
+
+-3. Active Listings page 
+-  + title
+-  + description
+-  + current price 
+-  + photo (if exists) 
+-
+
+-4. Listing page
+-  + if user signed 
+    + they can add it to their watchlist and remove
+-    + they can bid and must be greater than any other bids if not user should be presented with an error
+-     + if created -> close the aution, highest bidder wins and makes listing no logner active.
+-    + winner of the auction - the page should say so 
+-    + comments 
+
+-5. Watchlist page 
+-  + should show all listing users has added to their watchlist. Clicking on any of those listings user will be redirected to the listings page
+
+
+-6. Categories 
+-  + all categories should be listed 
+-  + clicking on any category user will be redirected to the listings page
+
+-7. Django admin Interface 
+-  + admin should be able to view, add, edit and delete any listings, comments and bids made on this site.
+-
+
++ Hints

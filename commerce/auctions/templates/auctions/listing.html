@@ -1,0 +1,70 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+  <div class="per_listing">
+    <h2>Listing: {{ item.name }}</h2> 
+    
+    {% if item.active_listing == False %}
+      <h2>You are Viewing a Closed Listing</h2>
+      <h2>{{ some_list.0.bid_user }} won this auction with highest bid of {{ highest_bidders }}</h2>
+    {% endif %}
+
+    <img src={{ item.listing_url }} alt="image of {{ item.name }}"/>
+
+    <p>{{ item.description }}</p>
+
+    {% if item.active_listing %}
+      {% if watchlist %}
+      <form action="/listings/{{ item.name }}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="add to watchlist" name="add_watchlist">
+      </form>
+      {% endif %}
+      <br>
+      <h4>Initial Bid: ${{ item.initial_bid }}</h4>
+      <h4>Current Bid: ${{ highest_bidders }}</h4>
+      {% if item.user == request.user %}
+        <form action="/listings/{{ item.name}}" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="Close Auction" name="close_bid">
+        </form>
+      {% elif total_bidders %}
+      <h4> Your Bid: ${{ total_bidders.0.1 }}</h4>
+      {% else %} 
+      <form action="/listings/{{ item.name }}" method="POST">
+        {% csrf_token %}
+        <input type="number" min={{ highest_bidders|add:"1"  }} name="bid">
+        <input type="submit" name="new_bid">
+      </form>
+      {% endif %}
+      <form action="/listings/{{ item.name }}" method="POST">
+        {% csrf_token %}
+          <input type="text" name="comment">
+          <input type="submit" value="comment" name="submit_comment">
+        </form>
+        <hr>
+        <h3><b>Comments section<b></h3>
+        <ul>
+        {% for comment in comments %}
+        <li>{{comment.comment}} by {{comment.comment_user}}</li> 
+        {% endfor %}
+        </ul>
+        <hr>
+    {% endif %}
+    <ul><h4>Details</h4></ul>
+
+      <li>Listed by: {{ item.user }}</li>
+
+      {% if item.category != None %}
+      <li>Category: {{ item.category }}</li>
+      {% else %}
+        <li>Category: No Category Listed</li>
+      {% endif %}
+      
+      
+
+
+
+  </div>
+{% endblock %}
+
