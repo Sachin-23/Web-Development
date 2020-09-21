@@ -8,6 +8,7 @@
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
+      <header>
         <h1>Auctions</h1>
         <div>
             {% if user.is_authenticated %}
@@ -22,6 +23,9 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'category' %}">Category</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'create_listing' %}">Create Listing</a>
                 </li>
                 <li class="nav-item">
@@ -30,10 +34,6 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'watchlist' %}">Your Watchlist<sup>{{ total_watchlist }}</sup></a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'category' %}">Category</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
@@ -47,8 +47,10 @@
                 </li>
             {% endif %}
         </ul>
-        <hr>
+      </header>
+      <main>
         {% block body %}
         {% endblock %}
+      </main>
     </body>
 </html>

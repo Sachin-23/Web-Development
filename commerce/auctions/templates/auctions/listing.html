@@ -1,54 +1,58 @@
 {% extends "auctions/layout.html" %}
 
+{% block title %}
+{{item.name}}
+{% endblock %}
+
 {% block body %}
+  {% if msg != "" %}
+  <div class="alert alert-danger" role="alert">
+    {{ msg }} 
+  </div>
+  {% endif %}
   <div class="per_listing">
-    <h2>Listing: {{ item.name }}</h2> 
+    <h3>Listing: {{ item.name }}</h3> 
     
     {% if item.active_listing == False %}
-      <h2>You are Viewing a Closed Listing</h2>
-      <h2>{{ some_list.0.bid_user }} won this auction with highest bid of {{ highest_bidders }}</h2>
+    <div class="alert alert-warning" role="alert">
+      You are Viewing a Closed Listing
+      {{ some_list.0.bid_user }} won this auction with highest bid of ${{ highest_bidders }}
+    </div>
     {% endif %}
 
     <img src={{ item.listing_url }} alt="image of {{ item.name }}"/>
 
-    <p>{{ item.description }}</p>
+    <p><b>Description:<b> {{ item.description }}</p>
 
     {% if item.active_listing %}
-      {% if watchlist %}
+      {% if total_watchlist == 0 %}
       <form action="/listings/{{ item.name }}" method="POST">
         {% csrf_token %}
-        <input type="submit" value="add to watchlist" name="add_watchlist">
+        <input type="submit" class="btn btn-link" value="Add to watchlist" name="add_watchlist">
+      </form>
+      {% else %}
+      <form action="/listings/{{ item.name }}" method="POST">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-link" value="remove from watchlist" name="remove_watchlist">
       </form>
       {% endif %}
       <br>
-      <h4>Initial Bid: ${{ item.initial_bid }}</h4>
-      <h4>Current Bid: ${{ highest_bidders }}</h4>
+      <h5>Initial Bid: ${{ item.initial_bid }}</h5>
+      <h5>Current Bid: ${{ highest_bidders }}</h5>
       {% if item.user == request.user %}
         <form action="/listings/{{ item.name}}" method="POST">
           {% csrf_token %}
-          <input type="submit" value="Close Auction" name="close_bid">
+          <input type="submit" class="btn btn-danger" value="Close Auction" name="close_bid">
         </form>
       {% elif total_bidders %}
-      <h4> Your Bid: ${{ total_bidders.0.1 }}</h4>
+      <h5> Your Bid: ${{ total_bidders.0.1 }}</h5>
       {% else %} 
       <form action="/listings/{{ item.name }}" method="POST">
         {% csrf_token %}
-        <input type="number" min={{ highest_bidders|add:"1"  }} name="bid">
-        <input type="submit" name="new_bid">
+        <input type="number" class="form-control" min={{ highest_bidders|add:"1"  }} name="bid">
+        <input type="submit" class="btn btn-primary" value="Bid" name="new_bid">
       </form>
       {% endif %}
-      <form action="/listings/{{ item.name }}" method="POST">
-        {% csrf_token %}
-          <input type="text" name="comment">
-          <input type="submit" value="comment" name="submit_comment">
-        </form>
-        <hr>
-        <h3><b>Comments section<b></h3>
-        <ul>
-        {% for comment in comments %}
-        <li>{{comment.comment}} by {{comment.comment_user}}</li> 
-        {% endfor %}
-        </ul>
         <hr>
     {% endif %}
     <ul><h4>Details</h4></ul>
@@ -60,11 +64,18 @@
       {% else %}
         <li>Category: No Category Listed</li>
       {% endif %}
-      
-      
-
-
-
+        <hr>
+        <h3>Comments section</h3>
+        <ul>
+        {% for comment in comments %}
+        <li>{{comment.comment}} by {{comment.comment_user}}</li> 
+        {% endfor %}
+        </ul>
+      <form action="/listings/{{ item.name }}" method="POST">
+        {% csrf_token %}
+          <input type="text" class="form-control" name="comment">
+          <input type="submit"  value="comment" name="submit_comment">
+        </form>
   </div>
 {% endblock %}
 

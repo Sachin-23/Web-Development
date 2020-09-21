@@ -1,7 +1,7 @@
 # Project 2
 
 -1. Models - 3 models 
--  + auction listing
++ auction listing
 -  + bids
 -  + comments made on auction listing
 
