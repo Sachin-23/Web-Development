@@ -38,7 +38,6 @@ class Create_listing(forms.Form):
 
 
 def index(request):
-#    print("all listing", all_listing)
     all_listing = [i for i in Auction_listing.objects.all() if i.active_listing]
     watchlist = 0
     if request.user.username: 
@@ -118,10 +117,8 @@ def create_listing(request):
                 description = form.cleaned_data["description"]
                 bid = form.cleaned_data["intial_bid"]
                 user = User.objects.get(username=request.user.username)
-                print(type(form.cleaned_data["url"]))
                 if ((url := form.cleaned_data["url"]) == ""):
                     url = "https://indianacademyofdrones.com/wp-content/themes/eikra/assets/img/noimage-420x273.jpg"
-                print(type(form.cleaned_data["url"]), url)
                 if ((category := form.cleaned_data["category"]) == ""):
                     category = "other"
                 new_listing = Auction_listing(name=name, description=description, \
@@ -141,64 +138,63 @@ def create_listing(request):
 @login_required(login_url="/login")
 def get_listing(request, name):
     msg = ""
-    try:
-        current_listing = Auction_listing.objects.get(name=name) 
-        current_user = User.objects.get(username=request.user.username)
-        current_bids = Bids.objects.filter(bid_item=current_listing)
-        total_comments = Comments.objects.filter(comment_item=current_listing)
-        watchlist = Watchlist.objects.filter(user=current_user, item=current_listing) 
-        total_bids = sorted(current_bids, key=lambda x: x.bid_value, reverse=True)
-    except: 
-        msg = f"Not item found with {name}"
-    if len(total_bids) != 0:
-        highest_bid = max([current_listing.initial_bid, total_bids[0].bid_value])
+    current_user = User.objects.get(username=request.user.username)
+    current_listing = Auction_listing.objects.get(name=name)
+    check_watchlist = Watchlist.objects.filter(user=current_user, item=current_listing)
+    comments = Comments.objects.filter(comment_item=current_listing)
+    bid_users = [(str(i.bid_user), (i.bid_value)) for i in Bids.objects.filter(bid_item=current_listing)]
+    bid_users = sorted(bid_users, key= lambda x: x[1])
+    if len(bid_users) != 0:
+        highest_bid = max(bid_users[-1][1], current_listing.initial_bid)
+        highest_bidder = bid_users[-1]
     else:
         highest_bid = current_listing.initial_bid
-    total_bidders = [(i.bid_user, i.bid_value) for i in current_bids \
-            if str(i.bid_user) == str(request.user.username)]
+        highest_bidder = ""
     if request.method == "POST":
-        if "close_bid" in request.POST: 
-            try:
-                win_user = total_bids[-1].bid_user
-                current_listing.active_listing = False; #make changes
-                current_listing.save()
-                winner = Winners(winner_user=win_user, item=current_listing)
-                winner.save()
-                winner = winner.winner_user
-            except: 
-                msg = "No one has bid yet"
-        if "new_bid" in request.POST:
-            try:
-                bid = request.POST["bid"]
-                new_bid = Bids(bid_user=current_user, bid_item=current_listing, \
-                        bid_value=bid)
+        try:
+            if "add_watchlist" in request.POST:
+                new_watchlist = Watchlist(user=current_user, item=current_listing)
+                new_watchlist.save()
+            elif "rm_watchlist" in request.POST:
+                check_watchlist.delete() 
+            elif "add_comment" in request.POST:
+                comment = request.POST["comment"]
+                if comment != "":
+                    new_comment = Comments(comment_user=current_user, \
+                            comment_item=current_listing, comment=comment)
+                    new_comment.save()
+                else: 
+                    msg = "Please enter a valid Comment"
+            elif "add_bid" in request.POST:
+                bid = int(request.POST["bid"])
+                if current_user.username in [i[1] for i in bid_users]:
+                    new_bid = Bids.objects.get(bid_user=current_user, bid_item=current_listing)
+                    new_bid.bid_value = bid
+                else:
+                    new_bid = Bids(bid_user=current_user, \
+                            bid_item=current_listing, bid_value=bid)
                 new_bid.save()
-            except: 
-                msg = "Please enter a bid"
-        if "submit_comment" in request.POST:
-           comment = request.POST["comment"]
-           if comment != "":
-               new_comment = Comments(comment_user=current_user, \
-                       comment_item=current_listing, comment=comment)
-               new_comment.save()
-        if "add_watchlist" in request.POST:
-            new_watchlist = Watchlist(user=current_user, item=current_listing) 
-            new_watchlist.save()
-        if "remove_watchlist" in request.POST:
-            new_watchlist = Watchlist.objects.filter(user=current_user, item=current_listing) 
-            new_watchlist.delete()
+            elif "close_bid" in request.POST:
+                if len(bid_users) != 0:
+                    new_winner = Winners(winner_user=current_user, item=current_listing)
+                    current_listing.active_listing = False
+                    new_winner.save()
+                    current_listing.save()
+                else: 
+                    msg = "No one has bid yet"
+        except Exception as e:
+            msg = "Some error occurred, please try again"
         if msg == "":
             return HttpResponseRedirect(reverse("listing", args=[name]))
     return render(request, "auctions/listing.html", {
-        "item": current_listing,
-        "category": Category.objects.get(item=current_listing),
-        "highest_bidders": highest_bid,
-        "total_bidders": total_bidders,
-        "some_list": total_bids,
-        "comments": total_comments,
-        "total_watchlist": len(watchlist),
-        "msg": msg
+        "msg": msg,
+        "listing": current_listing,
+        "check_watchlist": len(check_watchlist),
+        "comments": comments,
+        "highest_bid": highest_bid,
+        "highest_bidder": highest_bidder
         })
+
 
 @login_required(login_url="/login")
 def show_closed_listing(request):
@@ -220,7 +216,7 @@ def get_watchlist(request):
 @login_required(login_url="/login")
 def get_category(request, category=None):
     if category != None:
-        items = [i.item for i in Category.objects.filter(category=category)]
+        items = [i.item for i in Category.objects.filter(category=category) if i.item.active_listing == True]
         return render(request, "auctions/index.html",  {
                 "title": category + " ",
                 "items": items
@@ -229,6 +225,3 @@ def get_category(request, category=None):
     return render(request, "auctions/category_listing.html", {
         "category": all_category
         })
-    
-
-

@@ -62,6 +62,12 @@ class Winners(models.Model):
     item = models.ForeignKey(Auction_listing, on_delete=models.CASCADE, \
             related_name="winner_item")
 
+    def __str__(self):
+        return f"{self.winner_user} {self.item}"
+
 class Watchlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlist_user")
     item = models.ForeignKey(Auction_listing, on_delete=models.CASCADE, related_name="watchlist_item")
+
+    def __str__(self):
+        return f"{self.user} {self.item}"

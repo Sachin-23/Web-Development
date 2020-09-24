@@ -1,81 +1,92 @@
 {% extends "auctions/layout.html" %}
 
 {% block title %}
-{{item.name}}
+{{ listing.name|capfirst }}
 {% endblock %}
 
+{{ highest.bidder }}
+
+
+
 {% block body %}
-  {% if msg != "" %}
-  <div class="alert alert-danger" role="alert">
-    {{ msg }} 
+<h1>{{ listing.name|capfirst }}</h1>
+
+{% if listing.active_listing %}
+
+  {% if check_watchlist == 0 %}
+
+    <form action="{% url 'listing'  listing.name %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" class="btn btn-warning" value="Add to watchlist" name="add_watchlist">
+    </form>
+
+  {% else %}
+
+      <form action="{% url 'listing' listing.name %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" class="btn btn-warning" value="Remove to watchlist" name="rm_watchlist">
+    </form>
+
+    {% endif %}
+  {% else %}
+  <div class="alert alert-success" >
+    Your are viewing a closed listing 
+    {% if highest_bidder.0 == request.user.username %}
+      You    
+     {% else %}
+      {{ highest_bidder.0 }} 
+    {% endif %}
+    have won this bid 
   </div>
+{% endif %}
+
+
+{% if msg != "" %}
+<div class="alert alert-danger">
+ {{ msg }}
+</div>
+{% endif %}
+<img style="margin: 20px 0px;" height="400" src="{{ listing.listing_url }}" alt="Image of a {{ listing.name  }}">
+<h4>Details</h4>
+<h6>Description: {{listing.description}}</h6>
+<h6>Listed by {{listing.user }}</h6>
+<h6>Listed on {{listing.created_at}}</h6>
+<h6>Current Bid: ${{ highest_bid }}</h6>
+
+{% if listing.active_listing %}
+{% if request.user == listing.user %}
+
+  <form action="{% url 'listing' listing.name %}" method="POST">
+    {% csrf_token %}  
+    <input type="submit" class="btn btn-danger" name="close_bid" value="Close Auction">
+  </form>
+
+{% else %}
+  {% if highest_bidder == user.username %}
+
+  <h5>Your bid is the highest ${{ highest_bid }}</h5>
   {% endif %}
-  <div class="per_listing">
-    <h3>Listing: {{ item.name }}</h3> 
-    
-    {% if item.active_listing == False %}
-    <div class="alert alert-warning" role="alert">
-      You are Viewing a Closed Listing
-      {{ some_list.0.bid_user }} won this auction with highest bid of ${{ highest_bidders }}
-    </div>
-    {% endif %}
+  <form class="form-group" action='{% url "listing" listing.name %}' method="POST">
+    {% csrf_token %}
+    <input type="number" class="form-control" width="100" min="{{ highest_bid|add:"1" }}" placeholder="Bid" name="bid">
+    <input type="submit" value="Bid" class="btn btn-primary" name="add_bid">
+  </form>
 
-    <img src={{ item.listing_url }} alt="image of {{ item.name }}"/>
+{% endif %}
 
-    <p><b>Description:<b> {{ item.description }}</p>
+<hr>
+<h3>Comment Section</h3>
+<ul>
+{% for comment in comments %}
+<li>{{ comment.comment }} <b>by {{ comment.comment_user }}</b></li>
+{% endfor %}
+</ul>
+<form class="form-group" action='{% url "listing" listing.name %}' method="POST">
+  {% csrf_token %}
+  <input type="text" class="form-control" width="100" placeholder="Comment" name="comment">
+  <input type="submit" value="Add Comment" class="btn btn-secondary" name="add_comment">
+</form>
 
-    {% if item.active_listing %}
-      {% if total_watchlist == 0 %}
-      <form action="/listings/{{ item.name }}" method="POST">
-        {% csrf_token %}
-        <input type="submit" class="btn btn-link" value="Add to watchlist" name="add_watchlist">
-      </form>
-      {% else %}
-      <form action="/listings/{{ item.name }}" method="POST">
-        {% csrf_token %}
-        <input type="submit" class="btn btn-link" value="remove from watchlist" name="remove_watchlist">
-      </form>
-      {% endif %}
-      <br>
-      <h5>Initial Bid: ${{ item.initial_bid }}</h5>
-      <h5>Current Bid: ${{ highest_bidders }}</h5>
-      {% if item.user == request.user %}
-        <form action="/listings/{{ item.name}}" method="POST">
-          {% csrf_token %}
-          <input type="submit" class="btn btn-danger" value="Close Auction" name="close_bid">
-        </form>
-      {% elif total_bidders %}
-      <h5> Your Bid: ${{ total_bidders.0.1 }}</h5>
-      {% else %} 
-      <form action="/listings/{{ item.name }}" method="POST">
-        {% csrf_token %}
-        <input type="number" class="form-control" min={{ highest_bidders|add:"1"  }} name="bid">
-        <input type="submit" class="btn btn-primary" value="Bid" name="new_bid">
-      </form>
-      {% endif %}
-        <hr>
-    {% endif %}
-    <ul><h4>Details</h4></ul>
-
-      <li>Listed by: {{ item.user }}</li>
-
-      {% if item.category != None %}
-      <li>Category: {{ item.category }}</li>
-      {% else %}
-        <li>Category: No Category Listed</li>
-      {% endif %}
-        <hr>
-        <h3>Comments section</h3>
-        <ul>
-        {% for comment in comments %}
-        <li>{{comment.comment}} by {{comment.comment_user}}</li> 
-        {% endfor %}
-        </ul>
-      <form action="/listings/{{ item.name }}" method="POST">
-        {% csrf_token %}
-          <input type="text" class="form-control" name="comment">
-          <input type="submit"  value="comment" name="submit_comment">
-        </form>
-  </div>
+{% endif %}
 {% endblock %}
 
