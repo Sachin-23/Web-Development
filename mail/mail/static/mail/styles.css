@@ -1,0 +1,31 @@
+textarea {
+    min-height: 400px;
+}
+
+.email  {
+  border: 1px solid black; 
+  border-radius: 3px;
+  margin: 5px 0px;
+  overflow: auto;
+  padding: 2px 0px;
+}
+
+.email span {
+  margin: 0px 5px;
+}
+
+
+.email  .timestamp  {
+  float: right;
+  /*give a color*/
+} 
+
+
+.read  {
+  background-color: #808080;
+}
+
+.not_read  {
+  background-color: #ffffff;
+}
+
