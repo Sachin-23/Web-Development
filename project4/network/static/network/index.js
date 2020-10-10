@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () =>  {
 
+  if (document.querySelector("#pagination") != undefined) { 
   const pagination = document.querySelector("#pagination");
 
   pagination.style.display = "none";
@@ -7,9 +8,9 @@ document.addEventListener("DOMContentLoaded", () =>  {
   window.onscroll = () =>  {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight)  {
       pagination.style.display = "block";
-      console.log("Reached at the end");
     }
   }
+}
 
   document.querySelectorAll("#like").forEach(function(button) {
 

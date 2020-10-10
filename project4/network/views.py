@@ -19,7 +19,14 @@ def index(request):
     # get current_page
     current_page =  int(request.GET.get("page") or 1)
 
-    page = p.page(current_page)
+    try:
+        current_page = int(request.GET.get("page") or 1)
+        page = p.page(current_page)
+    except:
+        return render(request, "network/error.html", {
+            "msg": f"Broken Link or Page has been removed"
+            })
+
 
     page_range = p.page_range
 
@@ -43,6 +50,7 @@ def index(request):
     return render(request, "network/index.html",  {
         "username": request.user.username,
         "posts": zip(page, liked_user),
+        "posts_count": len(all_posts),
         "prev": page.has_previous(),
         "next": page.has_next(),
         "current_page": current_page,
@@ -114,7 +122,13 @@ def get_profile(request, username):
     
     current_page =  int(request.GET.get("page") or 1)
 
-    page = p.page(current_page)
+    try:
+        current_page = int(request.GET.get("page") or 1)
+        page = p.page(current_page)
+    except:
+        return render(request, "network/error.html", {
+            "msg": f"Broken Link or Page has been removed"
+            })
 
     page_range = p.page_range
 
@@ -140,10 +154,10 @@ def get_profile(request, username):
     # get following 
     following = Follower.objects.filter(follower=user)
 
-
     return render(request, "network/profile.html", {
             "username": username, 
             "posts": zip(page, liked_user),
+            "posts_count": len(posts),
             "prev": page.has_previous(),
             "next": page.has_next(),
             "followers": followers,
@@ -227,9 +241,13 @@ def following(request):
     
     page_range = p.page_range
 
-    current_page = int(request.GET.get("page") or 1)
-
-    page = p.page(current_page)
+    try:
+        current_page = int(request.GET.get("page") or 1)
+        page = p.page(current_page)
+    except:
+        return render(request, "network/error.html", {
+            "msg": f"Broken Link or Page has been removed"
+            })
 
     liked_user = []
     if request.user.username != "":

@@ -13,33 +13,36 @@
   {% endif %}
 
 
-{% for post in posts %}
-      <div class="card border-primary mb-3" style="width: 95vw; margin: 0px auto;">
-        <div class="card-body">
-          <h4><a class="card-title" href="{% url "get_profile" post.0.user.username %}"><strong>{{ post.0.user.username }}</strong></a></h4>
-          {% if username == post.0.user.username %}
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ post.0.id }}">
-              Edit
-            </button>
-          {% endif %}
-          <p style="font-size: 20px;" class="card-text">{{ post.0.body }}</p>
-          <h5 class="card-subtitle text-muted" style="font-size: 18px;">{{ post.0.posted_at }}</h5>
+{% if posts_count %}
+  {% for post in posts %}
+        <div class="card border-primary mb-3" style="width: 95vw; margin: 0px auto;">
+          <div class="card-body">
+            <h4><a class="card-title" href="{% url "get_profile" post.0.user.username %}"><strong>{{ post.0.user.username }}</strong></a></h4>
+            {% if username == post.0.user.username %}
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ post.0.id }}">
+                Edit
+              </button>
+            {% endif %}
+            <p style="font-size: 20px;" class="card-text">{{ post.0.body }}</p>
+            <h5 class="card-subtitle text-muted" style="font-size: 18px;">{{ post.0.posted_at }}</h5>
 
-          <span>
-          {% if post.1 %}
-          <i id="like" data-id="{{ post.0.id }}"class="fas fa-heart" style="color: red;"></i>
-          {% else %}
-          <i id="like" data-id="{{ post.0.id }}" class="far fa-heart" style="color: red;"></i>
-          {% endif %}
-            <span id="likes_{{ post.0.id }}">
-              {{ post.0.likes }}          
-            </span>
-          </span> 
-
+            <span>
+            {% if post.1 %}
+            <i id="like" data-id="{{ post.0.id }}"class="fas fa-heart" style="color: red;"></i>
+            {% else %}
+            <i id="like" data-id="{{ post.0.id }}" class="far fa-heart" style="color: red;"></i>
+            {% endif %}
+              <span id="likes_{{ post.0.id }}">
+                {{ post.0.likes }}          
+              </span>
+            </span> 
+          </div>
         </div>
-      </div>
-  {% endfor %}
+    {% endfor %}
+{% else %}
+    <div class="alert alert-warning" style="margin: 15px; border-radius: 5px;"> No posts yet</div>
+{% endif %}
 
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -65,23 +68,6 @@
       </div>
     </div>
   </div> 
-
-
-
-<nav id="pagination" aria-label="Page navigation example">
-  <ul class="pagination justify-content-center">
-    <li class="page-item {% if not prev %} disabled {% endif %}">
-      <a class="page-link"  href='?page={{ current_page|add:"-1"}}' tabindex="-1">Previous</a>
-    </li>
-   <li class="page-item active">
-     <a class="page-link" >Page {{current_page }} of {{ range }}<span class="sr-only">(current)</span></a>
-    </li>
-    <li class="page-item {% if not next %} disabled {% endif %}">
-      <a class="page-link" href='?page={{ current_page|add:"+1" }}'>Next</a>
-    </li>
-  </ul>
-</nav>
-
 
 
 {% endblock %}

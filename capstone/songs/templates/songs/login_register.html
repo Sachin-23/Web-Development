@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>&#x1F3B6; Login</title>
+    <link rel="stylesheet" href="{% static "songs/style.css" %}">
+    <script src="{% static 'songs/index.js' %}"></script>
+  </head>
+  <body>
+    
+    <form id="login" style="display: none;" action="/login" method="POST">
+      <div class="centered">
+        {{ message }}
+        <h3>Login</h3>
+        <hr>
+        {% csrf_token %}
+        <input type="email" placeholder="Email" name="email">
+        <input type="password" placeholder="~ password ~"  minlength="8" name="password">
+        <input type="submit" value="Login">
+        <a id="show_register" href="">Create an account</a>
+      </div>
+    </form>
+
+    <form id="register" style="display: none;" action="/register" method="POST">
+      <div class="centered">
+        <div class="inputs">
+          {{ message }}
+          <h3>Register</h3>
+          <hr>
+          {% csrf_token %}
+          <input type="email" placeholder="Email" name="email">
+          <input type="username" placeholder="Username" name="username">
+          <input type="password" placeholder="~ Password ~" minlength="8" name="password">
+          <input type="password" placeholder="~ Password ~" name="confirmation">
+          <span>Artist <input type="checkbox" value="True" name="is_artist"></span>
+          <input type="submit" value="Register">
+          <a id="show_login" href="">I am already member</a>
+        </div>
+      </div>
+    </form>
+
+
+  </body>
+</html>

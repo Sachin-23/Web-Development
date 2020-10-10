@@ -10,7 +10,7 @@
   <div class="card-body">
     <h4 class="card-title" id="username">{{ username }}</h4>
     <h5 class="card-text">
-      <span>{{ posts.count }} Posts</span> <span id="followers">{{ followers.count }} Followers</span> <span>{{ following.count }} Following</span></h5>
+      <span>{{ posts_count }} Posts</span> <span id="followers">{{ followers.count }} Followers</span> <span>{{ following.count }} Following</span></h5>
     {% if user.username != username and user.is_authenticated %}
       <a id="following" class="btn btn-primary">
       {% if follows %}
@@ -29,7 +29,7 @@
   </div>
 </div>
 
-  {% if posts.count != 0 %}
+  {% if posts_count != 0 %}
     {% for post in posts %}
       <div class="card border-primary mb-3" style="width: 95vw; margin: 0px auto;">
         <div class="card-body" id="{{ post.0.id }}">
@@ -63,19 +63,6 @@
   {% else %}
     <p>{{ username }} has not made any posts yet.</p>
   {% endif %}
-
-
-
-<nav id="pagination" aria-label="Page navigation example">
-  <ul class="pagination justify-content-center">
-    <li class="page-item {% if not prev %} disabled {% endif %}">
-      <a class="page-link"  href='?current_page={{ current_page|add:"-1"}}' tabindex="-1">Previous</a>
-    </li>
-    <li class="page-item {% if not next %} disabled {% endif %}">
-      <a class="page-link" href='?current_page={{ current_page|add:"+1" }}'>Next</a>
-    </li>
-  </ul>
-</nav>
 
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

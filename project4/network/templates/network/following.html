@@ -7,15 +7,13 @@ Following
 {% block body %}
 
 
-  {% if posts %}
+  {% if posts_count %}
     <div class="card text-center" style="border: 0px">
-      <div class="card-title">
+      <div style="margin: 5px;" class="card-title">
         <h4>Following user's posts</h4>
       </div>
     </div>
     
-    <h4>{{ request.user.username }} Post's</h4>
-
 
     {% for post in posts %}
       <div class="card border-primary mb-3" style="width: 95vw; margin: 0px auto;">
@@ -39,19 +37,6 @@ Following
       </div>
     {% endfor %}
   {% else %}
-  <p>{{ username }} doesn't follow any other user.</p>
+    <div class="alert alert-warning" style="margin: 15px; border-radius: 5px;"> No posts yet</div>
   {% endif %}
-
-<nav id="pagination" aria-label="Page navigation example">
-  <ul class="pagination justify-content-center">
-    <li class="page-item {% if not prev %} disabled {% endif %}">
-      <a class="page-link"  href='?current_page={{ current_page|add:"-1"}}' tabindex="-1">Previous</a>
-    </li>
-    <li class="page-item {% if not next %} disabled {% endif %}">
-      <a class="page-link" href='?current_page={{ current_page|add:"+1" }}'>Next</a>
-    </li>
-  </ul>
-</nav>
-
-
 {% endblock %}
