@@ -1,0 +1,27 @@
+{% extends "pedopt/layout.html" %}
+
+{% block title %}
+Rehome
+{% endblock %}
+
+{% block body %}
+
+<form action="{% url 'rehome' %}" id="forms" method="POST" enctype="multipart/form-data">
+
+  {% csrf_token %}
+  {% if message %}
+  <div class="alert alert-danger">
+    {{ message }}
+  </div>
+  {% endif %}
+ {% for field in form %}
+    <div class="form-group">
+      <label for="{{ field.label_id }}">{{ field.label }}</label>
+        {{ field }}
+    </div>
+    {% endfor %}
+  <button type="submit" class="btn btn-primary">Rehome</button>
+</form>
+
+
+{% endblock %}

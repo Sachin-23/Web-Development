@@ -1,0 +1,10 @@
+#forms {
+  margin: 4%;
+}
+
+@media screen and (max-width: 600px)  {
+  #dog_in_kennel  {
+    display: none;
+  }
+}
+

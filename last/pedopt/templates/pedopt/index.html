@@ -1,0 +1,70 @@
+{% extends "pedopt/layout.html" %}
+
+
+{% block body %}
+
+<div style="margin: 1%">  
+<h4>Adopt the Perfect Pet</h4>
+<form action="search" id="find_pet" style="padding: 10px;margin: 1%" class="border">
+  <div class="form-group">
+    <label for="formGroupExampleInput">Location</label>
+    <input type="text" class="form-control" name="location" id="formGroupExampleInput" placeholder="Thane, Maharastra" required>
+  </div>
+  <div class="form-row">
+  <div class="form-group col-sm-4 col-lg-4">
+    <label for="inputState">Type</label>
+    <select id="inputState" name="type" class="form-control" required>
+      <option selected>Select</option>
+      <option value="Dog">Dog</option>
+      <option value="Cat">Cat</option>
+      <option value="Other">Other pets</option>
+    </select>
+   </div>
+  <div class="form-group col-sm-4 col-lg-4">
+    <label for="inputState">Age</label>
+    <select id="inputState" name="age" class="form-control" required>
+      <option selected>Select</option>
+      <option value="Young">Young</option>
+      <option value="Adult">Adult</option>
+      <option value="Senior">Senior</option>
+    </select>
+   </div>
+  <div class="form-group col-sm-4 col-lg-4">
+    <label for="inputState">Sex</label>
+    <select id="inputState" name="sex" class="form-control" required>
+      <option selected>Select</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+   </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<div id="message" style="display: none;" class="alert alert-danger">
+</div>
+
+{% if pets %}
+
+<div class="row" style="margin: 0 1% 1% 1%">
+{% for pet in pets %}
+    <div class="col-lg-3 col-md-4 col-sm-12" style="padding: 8px; max-width: 18rem; min-width: 15rem;">
+      <a href="{% url 'pet' pet.id %}" style="text-decoration: none;">
+      <div class="card text-center">
+        <img src="{{ pet.image.url }}" style="height: 179px;" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{ pet.name }}</h5>
+          <p class="card-text">{{ pet.city }}, {{ pet.state }}</p>
+        </div>
+      </div>
+    </a>
+    </div>
+{% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="alert alert-warning">
+Uh oh no search result found.
+</div>
+{% endif %}
+{% endblock %}

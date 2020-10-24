@@ -1,0 +1,32 @@
+{% extends "pedopt/layout.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block body %}
+
+
+<form id="forms" action="{% url 'login' %}" method="POST">
+
+  {% if message %}
+  <div class="alert alert-danger" role="alert">
+    {{ message }}
+  </div>
+  {% endif %}
+
+
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="exampleInputUsername1">Username</label>
+    <input type="username" name="username" class="form-control" id="exampleInputUsername1" required>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
+  </div>
+  <small class="form-text text-muted">Not registered? <a tabindex="-1" style="color: #28a745;" href={% url 'register' %}>Create an account</a></small>
+  <button type="submit" style="margin-top: 10px;" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}
