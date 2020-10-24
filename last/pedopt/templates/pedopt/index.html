@@ -4,7 +4,7 @@
 {% block body %}
 
 <div style="margin: 1%">  
-<h4>Adopt the Perfect Pet</h4>
+<h4>Adopt your Perfect Pet</h4>
 <form action="search" id="find_pet" style="padding: 10px;margin: 1%" class="border">
   <div class="form-group">
     <label for="formGroupExampleInput">Location</label>
@@ -52,7 +52,8 @@
 {% endif %}
 
 {% if pets %}
-
+<h4>Recently added</h4>
+<hr>
 <div class="row" style="margin: 0 1% 1% 1%">
 {% for pet in pets %}
     <div class="col-sm-12 col-md-3 col-lg-3" style="padding: 8px;">
@@ -78,16 +79,16 @@ No results found.
 {% if p %}
 <nav id="pagination" aria-label="..." style="width: 300px;margin: auto;">
   <ul class="pagination">
-    <li class="page-item {% if not has.previous %} disabled {% endif %}">
-      <span class="page-link">Previous</span>
+    <li class="page-item {% if not has_previous %} disabled {% endif %}">
+      <a class="page-link" href="?page={{ current_page|add:'-1' }}">Previous</a>
     <li class="page-item active" aria-current="page">
       <span class="page-link">
         Page {{ current_page }} of {{ range }}
         <span class="sr-only">(current)</span>
       </span>
     </li>
-    <li class="page-item {% if not p.has_next %} disabled {% endif %}">
-      <a class="page-link" href="#">Next</a>
+    <li class="page-item {% if not has_next %} disabled {% endif %}">
+      <a class="page-link" href="?page={{ current_page|add:'+1' }}">Next</a>
     </li>
   </ul>
 </nav>

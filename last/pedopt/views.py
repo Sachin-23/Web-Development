@@ -29,9 +29,54 @@ class AddPet(forms.ModelForm):
 
 
 def index(request):
-    pets = Pet.objects.filter(adopted=False)[:8]
+    try:
+        pets = Pet.objects.filter(adopted=False)
+
+        p = Paginator(pets, 8)
+
+        current_page_no = int(request.GET.get("page") or 1) 
+
+        current_page = p.page(current_page_no)
+
+    except Exception as e:
+        print(e)
+        return render(request, "pedopt/get_pet.html", {
+            "message": "Some error occured, Please try again."
+            })
+
     return render(request, "pedopt/index.html", {
-        "pets": pets
+        "p": p,
+        "current_page": current_page_no,
+        "pets": current_page,
+        "range": max(p.page_range),
+        "has_next": current_page.has_next(),
+        "has_previous": current_page.has_previous(),
+        })
+
+
+def adopted(request):
+    try:
+        pets = Pet.objects.filter(adopted=True)
+
+        p = Paginator(pets, 12)
+
+        current_page_no = int(request.GET.get("page") or 1) 
+
+        current_page = p.page(current_page_no)
+
+    except Exception as e:
+        print(e)
+        return render(request, "pedopt/get_pet.html", {
+            "message": "Some error occured, Please try again."
+            })
+
+    return render(request, "pedopt/adopted.html", {
+        "p": p,
+        "current_page": current_page_no,
+        "pets": current_page,
+        "range": max(p.page_range),
+        "has_next": current_page.has_next(),
+        "has_previous": current_page.has_previous(),
         })
 
 
@@ -103,7 +148,8 @@ def search(request):
 
         current_page = p.page(current_page_no)
 
-    except:
+    except Exception as e:
+        print(e)
         return render(request, "pedopt/get_pet.html", {
             "message": "Some error occured, Please try again."
             })
