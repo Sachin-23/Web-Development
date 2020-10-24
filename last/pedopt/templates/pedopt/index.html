@@ -44,17 +44,24 @@
 <div id="message" style="display: none;" class="alert alert-danger">
 </div>
 
+{% if title %}
+<div>
+  <h4>{{ title }}</h4>
+  <hr>
+</div>
+{% endif %}
+
 {% if pets %}
 
 <div class="row" style="margin: 0 1% 1% 1%">
 {% for pet in pets %}
-    <div class="col-lg-3 col-md-4 col-sm-12" style="padding: 8px; max-width: 18rem; min-width: 15rem;">
+    <div class="col-sm-12 col-md-3 col-lg-3" style="padding: 8px;">
       <a href="{% url 'pet' pet.id %}" style="text-decoration: none;">
       <div class="card text-center">
-        <img src="{{ pet.image.url }}" style="height: 179px;" class="card-img-top" alt="...">
+        <img src="{{ pet.image.url }}" style="max-height: 400px"  class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">{{ pet.name }}</h5>
-          <p class="card-text">{{ pet.city }}, {{ pet.state }}</p>
+          <p class="card-text">{{ pet.city|title }}, {{ pet.state|title }}</p>
         </div>
       </div>
     </a>
@@ -64,7 +71,25 @@
 </div>
 {% else %}
 <div class="alert alert-warning">
-Uh oh no search result found.
+No results found.
 </div>
+{% endif %}
+
+{% if p %}
+<nav id="pagination" aria-label="..." style="width: 300px;margin: auto;">
+  <ul class="pagination">
+    <li class="page-item {% if not has.previous %} disabled {% endif %}">
+      <span class="page-link">Previous</span>
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">
+        Page {{ current_page }} of {{ range }}
+        <span class="sr-only">(current)</span>
+      </span>
+    </li>
+    <li class="page-item {% if not p.has_next %} disabled {% endif %}">
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>
 {% endif %}
 {% endblock %}

@@ -4,13 +4,13 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class User(AbstractUser):
-    pass
+    contact = models.IntegerField(blank=True, null=True)
 
 
 class Pet(models.Model):
     name = models.CharField(max_length=256)
     image = models.ImageField(upload_to="images/")
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
     genders = (("Male", "Male"), ("Female", "Female"))
     sex = models.CharField(max_length=10, choices=genders)
     zip_code = models.IntegerField()
@@ -24,6 +24,9 @@ class Pet(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
     adopted = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['-added_at']
+
     def __str__(self):
         return f"Id: {self.id}, \
                 Name: {self.name}, \
@@ -35,7 +38,8 @@ class Pet(models.Model):
                 state: {self.state}, \
                 pet_type: {self.pet_type}, \
                 about: {self.about}, \
-                added_at: {self.added_at}"
+                added_at: {self.added_at}, \
+                adopted: {self.adopted}"
 
     def serialize(self):
         return {

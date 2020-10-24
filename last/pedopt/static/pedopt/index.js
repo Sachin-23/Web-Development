@@ -48,6 +48,22 @@ document.addEventListener("DOMContentLoaded", function()  {
       }
     }
   }
+
+  const pagination = document.querySelector("#pagination");
+  if (pagination)  {
+    pagination.style.display = "none";
+
+    window.onscoll = () =>  {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight)  {
+        
+        pagination.style.display = "block";
+
+      }
+      else  {
+        pagination.style.display = "none";
+      }
+    }
+  }
   
 
 });

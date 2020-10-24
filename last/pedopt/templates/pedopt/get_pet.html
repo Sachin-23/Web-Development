@@ -17,7 +17,7 @@ The link you followed may be broken, or the page may have been removed. <a href=
 <div style="margin: 4%;">
 <div class="card mb-3" style="border-color: #FFFFFF;">
   <span class="card-title"><h2 style="display: inline;">{{ pet.name }}</h2>
-    <img  style="float: right;" width="35px" height="35px"  id="wishlist" data-id="{{ pet.id }}"
+    <img style="float: right;" width="35px" height="35px"  id="wishlist" data-id="{{ pet.id }}"
   {% if wishlist %}
     src="/static/pedopt/wishlist_fill.svg"
     alt="add to wishlist"
@@ -36,6 +36,21 @@ The link you followed may be broken, or the page may have been removed. <a href=
       <li class="list-group-item">Age: {{ pet.age_group }}</li>
       <li class="list-group-item">Sex: {{ pet.sex }}</li>
     </ul>
+
+  {% if user == pet.user %}
+  <form action="/adopt" method="POST" class="form-inline">
+    <input type="hidden" name="id" value="{{ pet.id }}"></input>
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary my-1">Did your pet got adopted ?</button>
+    {% if message %}
+      <div class="alert alert-warning">
+      {{ message }}
+      </div>
+    {% endif %}
+  </form> 
+  {% endif %}
+
+
     <hr>
     <h3>About</h3>
     <p style="font-size: 1.8vh;" class="card-text">{{ pet.about }}</p>
@@ -49,13 +64,14 @@ The link you followed may be broken, or the page may have been removed. <a href=
   <div class="card">
     <div class="card-body">
       <h5 class="card-title"><img style="height: 20px;" src="/static/pedopt/location.png"><span> Location</span></h5>
-      <p class="card-text">{{ pet.city }}, {{ pet.state }}, {{ pet.zip_code }}</p>
+      <p class="card-text">{{ pet.city|title }}, {{ pet.state|title }}, {{ pet.zip_code|title }}</p>
     </div>
   </div>
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">&#x1F4DE; Contact</h5>
       <p class="card-text">{{ pet.owner.email }}</p>
+      <p class="card-text">{{ pet.owner.contact }}</p>
     </div>
   </div>
 </div>

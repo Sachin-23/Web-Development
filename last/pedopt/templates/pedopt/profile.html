@@ -1,0 +1,54 @@
+{% extends "pedopt/layout.html" %}
+
+
+{% block title %}
+{{ profile.username }}
+{% endblock %}
+
+{% block body %}
+
+<div style="margin: 0 1% 1% 1%">
+<br>
+<h4>Your wishlist</h4>
+<hr>
+<div class="row" style="margin: 0 1% 1% 1%">
+{% for wishlist in wishlists %}
+  <div id="wishlist">
+      <div class="col-lg-3 col-md-4 col-sm-12" style="padding: 8px; max-width: 18rem; min-width: 15rem;">
+        <a href="{% url 'pet' wishlist.pet.id %}" style="text-decoration: none;">
+          <div class="card text-center">
+            <img src="{{ wishlist.pet.image.url }}" style="height: 179px;" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ wishlist.pet.name }}</h5>
+              <p class="card-text">{{ wishlist.pet.city|title }}, {{ wishlist.pet.state|title }}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+  </div>
+{% endfor %}
+</div>
+
+
+<h4>Pets you have added</h4>
+<hr>
+<div class="row" style="margin: 0 1% 1% 1%">
+{% for pet in pets_added %}
+  <div id="wishlist">
+      <div class="col-lg-3 col-md-4 col-sm-12" style="padding: 8px; max-width: 18rem; min-width: 15rem;">
+        <a href="{% url 'pet' pet.id %}" style="text-decoration: none;">
+          <div class="card text-center">
+            <img src="{{ pet.image.url }}" style="height: 179px;" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ pet.name }}</h5>
+              <p class="card-text">{{ pet.city|title }}, {{ pet.state|title }}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+  </div>
+{% endfor %}
+</div>
+</div>
+
+{% endblock %}

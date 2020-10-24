@@ -3,6 +3,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect, JsonResponse
 from django.db import IntegrityError
 from django.urls import reverse
+from django.core.paginator import Paginator
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django import forms 
@@ -28,16 +29,17 @@ class AddPet(forms.ModelForm):
 
 
 def index(request):
-    pets = Pet.objects.all()
+    pets = Pet.objects.filter(adopted=False)[:8]
     return render(request, "pedopt/index.html", {
         "pets": pets
         })
+
 
 @login_required
 def get_pet(request, Id):
     message = ""
     try:
-        pet = Pet.objects.get(id=Id)
+        pet = Pet.objects.get(id=Id, adopted=False)
         wishlist = Wishlist.objects.filter(user=request.user, pet=pet)
         return render(request, "pedopt/get_pet.html",  {
             "pet": pet,
@@ -49,11 +51,11 @@ def get_pet(request, Id):
             "message": "Sorry, this page isn't available."
             })
 
+
 @login_required
 def wishlist(request):
     if request.method == "PUT":
         if request.user.is_authenticated:
-            print("Got put request")
             data = json.loads(request.body)
             Id = data["id"]
             try:
@@ -77,23 +79,76 @@ def search(request):
     pet_type = request.GET["type"]
     age = request.GET["age"]
     sex = request.GET["sex"]
-    print(location, pet_type, age, sex)
-    if location.isdecimal():
-        pets = Pet.objects.filter(zip_code=int(location), pet_type=pet_type, \
-                age_group=age, sex=sex)
-    else:
-        p = r"\w+"
-        location = re.findall(p, location)
-        if len(location) > 2:
-            pets = Pet.objects.filter(city=location[0], state=location[1], \
-                    pet_type=pet_type, age_group=age, sex=sex)
+    pets = []
+
+    try: 
+        if location.isdecimal():
+            pets = Pet.objects.filter(zip_code=int(location), pet_type=pet_type, \
+                    age_group=age, sex=sex, adopted=False)
         else:
-            pets = Pet.objects.filter(city=location[0], pet_type=pet_type, \
-                    age_group=age, sex=sex)
-    print(pets)
+            p = r"\w+"
+            location = re.findall(p, location)
+            if len(location) > 2:
+                pets = Pet.objects.filter(city=location[0].lower(), \
+                        state=location[1].lower(), pet_type=pet_type, \
+                        age_group=age, sex=sex, adopted=False)
+            elif location:
+                pets = Pet.objects.filter(city=location[0].lower(), \
+                        pet_type=pet_type, age_group=age, \
+                        sex=sex, adopted=False)
+
+        p = Paginator(pets, 8)
+
+        current_page_no = int(request.GET.get("page") or 1) 
+
+        current_page = p.page(current_page_no)
+
+    except:
+        return render(request, "pedopt/get_pet.html", {
+            "message": "Some error occured, Please try again."
+            })
+
     return render(request, "pedopt/index.html", {
-        "pets": pets
+        "title": "You're search results :",
+        "p": p,
+        "current_page": current_page_no,
+        "pets": current_page,
+        "range": max(p.page_range),
+        "has_next": current_page.has_next(),
+        "has_previous": current_page.has_previous(),
         })
+
+
+def get_profile(request):
+    wishlists = Wishlist.objects.filter(user=request.user)
+    pets_added = Pet.objects.filter(owner=request.user)
+    return render(request, "pedopt/profile.html", {
+        "wishlists": wishlists,
+        "pets_added": pets_added
+        })
+    
+@login_required
+def adopt(request):
+    if request.method == "POST":
+        pet_id = int(request.POST["id"])
+        try:
+            pet = Pet.objects.get(id=pet_id)
+            wishlists = Wishlist.objects.filter(pet=pet)
+            if pet.owner == request.user:
+                pet.adopted = True
+                pet.save()
+                for wishlist in wishlists:
+                    wishlist.delete()
+        except Exception as e:
+            print(e)
+            wishlist = Wishlist.objects.filter(user=request.user, pet=pet)
+            return render(request, "pedopt/get_pet.html",  {
+                "pet": pet,
+                "message": "Some error occured, Please try again.",
+                "wishlist": wishlist
+                })
+    return HttpResponseRedirect(reverse("index"))
+
 
 @login_required
 def rehome(request):
@@ -101,7 +156,9 @@ def rehome(request):
         form = AddPet(request.POST, request.FILES)
         if form.is_valid():
             pet = form.save(commit=False)
-            pet.user = request.user
+            pet.city = pet.city.lower()
+            pet.state = pet.state.lower()
+            pet.owner = request.user
             pet.save()
             return HttpResponseRedirect(reverse("index"))
         else:
@@ -138,6 +195,7 @@ def register(request):
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
+        contact = request.POST["contact"]
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
@@ -145,7 +203,7 @@ def register(request):
                 "message": "Passwords must match."
                 })
         try:
-            user = User.objects.create_user(username=username, email=email, password=password)
+            user = User.objects.create_user(username=username, email=email, contact=contact, password=password)
             user.save()
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
