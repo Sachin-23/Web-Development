@@ -53,7 +53,7 @@ function load_mailbox(mailbox) {
       //check if user has received any mails 
       if (email.length == 0)  {
         const div = document.createElement("div");
-        div.innerText = "No emails for you";
+        div.innerText = "No emails received or sent yet.";
         div.setAttribute("class", "alert alert-warning");
         document.querySelector("#emails-view").appendChild(div);
       }
@@ -84,7 +84,7 @@ function load_mailbox(mailbox) {
           
           // check if the mail has been read
           if (email[i].read)  {
-            div.style.backgroundColor = "grey";
+            div.style.backgroundColor = "#c0c0c0";
           }
           else  {
             div.style.backgroundColor = "white";
@@ -93,6 +93,7 @@ function load_mailbox(mailbox) {
           
           // add event click to every div
           div.addEventListener("click", function()  {
+
             
             // fetch the email details
             fetch(`/emails/${this.id}`)
@@ -218,6 +219,10 @@ function archiveMail()  {
         archived: true
       })
     })
+    .then(response => response.json)
+    .then(data => {
+      load_mailbox("archive");
+    });
   }
   else  {
     fetch(`/emails/${this.dataset.id}`,  {
@@ -226,7 +231,9 @@ function archiveMail()  {
         archived: false
       })
     })
+    .then(response => response.json)
+    .then(data => {
+      load_mailbox("inbox");
+    });
   }
-  console.log("Hello");
-  load_mailbox("inbox");
 }
