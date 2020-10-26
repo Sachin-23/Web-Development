@@ -36,7 +36,7 @@
 
           <h5><a class="card-title" href="{% url "get_profile" post.0.user.username %}"><strong>{{ post.0.user.username }}</strong></a></h5>
 
-          {% if username == post.0.user.username %}
+          {% if user == post.0.user %}
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ post.0.id }}">
               Edit

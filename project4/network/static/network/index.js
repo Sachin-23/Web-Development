@@ -1,5 +1,26 @@
 document.addEventListener("DOMContentLoaded", () =>  {
 
+
+  const newPost = document.querySelector("#new-post");
+
+  const newPostButton = document.querySelector("#add-post");
+  
+  const newPostBody = document.querySelector("#new-post-body");
+
+  if (newPost)  {
+    newPostButton.disabled = true;
+
+    newPost.onkeyup = () => {
+      if (newPostBody.value.length > 0)  {
+       newPostButton.disabled = false; 
+      }
+      else  {
+       newPostButton.disabled = true; 
+      }
+    }
+  }
+
+
   if (document.querySelector("#pagination") != undefined) { 
   const pagination = document.querySelector("#pagination");
 
