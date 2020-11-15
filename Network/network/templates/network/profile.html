@@ -1,0 +1,93 @@
+{% extends "network/layout.html" %}
+
+{% block title %}
+{{ username }}
+{% endblock %}
+
+
+{% block body %}
+<div class="card text-center">
+  <div class="card-body">
+    <h4 class="card-title" id="username">{{ username }}</h4>
+    <h5 class="card-text">
+      <span>{{ posts_count }} Posts</span> <span id="followers">{{ followers.count }} Followers</span> <span>{{ following.count }} Following</span></h5>
+    {% if user.username != username and user.is_authenticated %}
+      <a id="following" class="btn btn-primary">
+      {% if follows %}
+          Unfollow
+      {% else %}
+          Follow
+      {% endif %}
+        </a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card text-center">
+  <div class="card-body">
+    <h5>{{ username}} post's</h5>
+  </div>
+</div>
+
+  {% if posts_count != 0 %}
+    {% for post in posts %}
+      <div class="card border-primary mb-3" style="width: 95vw; margin: 0px auto;">
+        <div class="card-body" id="{{ post.0.id }}">
+
+          <h5><a class="card-title" href="{% url "get_profile" post.0.user.username %}"><strong>{{ post.0.user.username }}</strong></a></h5>
+
+          {% if user == post.0.user %}
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ post.0.id }}">
+              Edit
+            </button>
+          {% endif %}
+          <p style="font-size: 20px;" class="card-text">{{ post.0.body }}</p>
+          <h5 class="card-subtitle text-muted" style="font-size: 18px;">{{ post.0.posted_at }}</h5>
+
+          <span>
+          {% if post.1 %}
+          <i id="like" data-id="{{ post.0.id }}"class="fas fa-heart" style="color: red;"></i>
+          {% else %}
+          <i id="like" data-id="{{ post.0.id }}" class="far fa-heart" style="color: red;"></i>
+          {% endif %}
+            <span id="likes_{{ post.0.id }}">
+              {{ post.0.likes }}          
+            </span>
+          </span> 
+
+
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>{{ username }} has not made any posts yet.</p>
+  {% endif %}
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label" id="msg" style="color: red;"></label>
+              <textarea class="form-control" id="message-text"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="edit-button" class="btn btn-primary">Edit</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+
+{% endblock %}

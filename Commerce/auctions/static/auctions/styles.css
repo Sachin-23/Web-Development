@@ -1,0 +1,54 @@
+header {
+  background-color: #fcba03;  
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+}
+
+main  {
+  padding: 20px;
+}
+
+.listing  {
+  padding-left: 0px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.listing img  {
+  height: 300px;
+  width: 400px;
+}
+
+img  {
+  border-radius: 5px;
+}
+
+
+.listing  li  {
+  border: 1px solid #fc8c03;
+  overflow: hidden;
+  margin: 20px;
+  border-radius: 5px;
+  width: 400px;
+}
+
+.listing a  {
+  text-decoration: none;
+  color: #0f0f0f;
+  text-align: center;
+}
+
+.per_listing img  {
+  height: 450px;
+  margin: 15px 5%;
+}
+
+.create  {
+  width: 50%;
+}
+
+input[type=submit]  {
+  margin-top: 10px;
+}
